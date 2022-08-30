@@ -1,6 +1,6 @@
 .svn
 .settings
-target
+/target/
 .idea
 *.iml
 .classpath
