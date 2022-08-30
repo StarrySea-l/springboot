@@ -1,14 +1,17 @@
 package com.springboot.dome.entity;
 
-import cn.hutool.core.annotation.Alias;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+
 
 /**
  * <p>
@@ -38,6 +41,11 @@ public class Users implements Serializable {
      */
     @TableField("passWord")
     private String password;
+
+    /**
+     * 用户对应的角色集合
+     */
+    private Set<Role> roles;
 
     public String getUsername() {
         return username;
