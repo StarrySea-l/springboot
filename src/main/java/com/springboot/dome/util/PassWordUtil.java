@@ -82,7 +82,7 @@ public class PassWordUtil {
      * @param psd_count
      * @param key
      */
-    public static void deletePsdCountIfNecessary(RedisTemplate<String, Integer> redisTemplate, Integer psd_count,
+    public static void deletePsdCountIfNecessary(RedisTemplate<Object, Object> redisTemplate, Integer psd_count,
                                                  String key) {
         if (psd_count != 0) {
             redisTemplate.delete(key);

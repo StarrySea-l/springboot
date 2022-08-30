@@ -1,7 +1,12 @@
 package com.springboot.dome.imagecode;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Controller;
 
 import javax.servlet.http.HttpSession;
 import java.awt.*;
@@ -16,6 +21,8 @@ public class ImageCodeValidator {
     //验证码保存在session中的属性key
     public static final String SESSION_CODE_KEY = "IMAGE_VALIDATE_CODE";
 
+    @Autowired
+    RedisTemplate redisTemplate;
     // 图片的宽度。
     private int width = 160;
     // 图片的高度。
@@ -28,8 +35,8 @@ public class ImageCodeValidator {
     /*private char[] codeSequence = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T',
             'U', 'V', 'W', 'X', 'Y', 'Z', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'c', 'd', 'e', 'k', 'n', 'r', 's', 't', 'v', 'w', 'u', 'v', 'f', 'h'};*/
 
-   //private char[] codeSequence = {'2', '3', '4', '5', '6', '7', '8', '9', 'a', 'c', 'd', 'e', 'k', 'n', 'r', 's', 't', 'v', 'w', 'u', 'v', 'f', 'h'};
-    private char[] codeSequence = {'1','2', '3', '4', '5', '6', '7', '8', '9'};
+    //private char[] codeSequence = {'2', '3', '4', '5', '6', '7', '8', '9', 'a', 'c', 'd', 'e', 'k', 'n', 'r', 's', 't', 'v', 'w', 'u', 'v', 'f', 'h'};
+    private char[] codeSequence = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
     public BufferedImage createSessionCode(HttpSession session) {
         int x = 0, fontHeight = 0, codeY = 0;
@@ -79,7 +86,8 @@ public class ImageCodeValidator {
 
         // 将四位数字的验证码保存到Session中。
         String code = randomCode.toString();
-        session.setAttribute(SESSION_CODE_KEY, code);
+        ValueOperations ops = redisTemplate.opsForValue();
+        ops.set(SESSION_CODE_KEY, code);
         return bi;
     }
 
@@ -100,16 +108,12 @@ public class ImageCodeValidator {
         }
     }
 
-    public boolean verifySession(HttpSession session, String code) {
-        if (null == session || null == code || "".equals(code)) {
+    public boolean verifySession(String code, String o) {
+        if (null == code || "".equals(code)) {
             return false;
         }
-        String codeInSession = (String) session.getAttribute(SESSION_CODE_KEY);
-        boolean b = code.equalsIgnoreCase(codeInSession); //不区分大小写
+        boolean b = code.equalsIgnoreCase(o); //不区分大小写
         //boolean b = code.contains(codeInSession); // 区分大小写
-        if (b) {
-            session.removeAttribute(SESSION_CODE_KEY);
-        }
         return b;
     }
 

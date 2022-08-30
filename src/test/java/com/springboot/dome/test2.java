@@ -1,7 +1,10 @@
 package com.springboot.dome;
 
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 
 /**
  * @author :王磊
@@ -11,9 +14,4 @@ import org.springframework.boot.test.context.SpringBootTest;
  */
 @SpringBootTest
 public class test2 {
-
-    @Test
-    public void test() {
-
-    }
 }
