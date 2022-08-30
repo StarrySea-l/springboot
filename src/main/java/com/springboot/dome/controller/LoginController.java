@@ -35,8 +35,8 @@ public class LoginController {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    //验证码保存在session中的属性key
-    public static final String SESSION_CODE_KEY = "IMAGE_VALIDATE_CODE";
+    //验证码保存在redis中的属性key
+    public static final String REDIS_CODE_KEY = "IMAGE_VALIDATE_CODE";
 
     @Autowired
     IUsersService iUsersService;
@@ -70,7 +70,7 @@ public class LoginController {
             }
         }
 
-        String s = (String) ops.get(SESSION_CODE_KEY);
+        String s = (String) ops.get(REDIS_CODE_KEY);
         JSONObject json = new JSONObject();
         try {
             ImageCodeValidator imageCodeValidator = new ImageCodeValidator();
@@ -84,7 +84,7 @@ public class LoginController {
             UsernamePasswordToken userToken = new UsernamePasswordToken(userName, passWord);
             try {
                 currentUser.login(userToken);
-                redisTemplate.delete(SESSION_CODE_KEY);
+                redisTemplate.delete(REDIS_CODE_KEY);
                 System.out.println(userName + "密码验证通过 :)");
             } catch (Exception e) {
                 e.printStackTrace();
