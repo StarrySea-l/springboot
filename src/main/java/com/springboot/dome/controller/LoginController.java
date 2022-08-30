@@ -53,7 +53,7 @@ public class LoginController {
         try {
             Users user = iUsersService.findUserByUserName(userName);
             if (null == user) {
-                return ResultBean.fail("用户名不存在!");
+                return ResultBean.fail("用户不存在!");
             }
         } catch (Exception e) {
             e.printStackTrace();
