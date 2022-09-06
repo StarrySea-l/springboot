@@ -3,10 +3,11 @@ package com.springboot.dome.controller;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.springboot.dome.base.ResultBean;
-import com.springboot.dome.entity.Users;
+import com.springboot.dome.entity.User;
+import com.springboot.dome.entity.bean.UserBean;
 import com.springboot.dome.imagecode.ImageCodeValidator;
 
-import com.springboot.dome.service.IUsersService;
+import com.springboot.dome.service.UserService;
 import com.springboot.dome.util.ContextHelper;
 import com.springboot.dome.util.PassWordUtil;
 import org.apache.shiro.SecurityUtils;
@@ -39,7 +40,7 @@ public class LoginController {
     public static final String REDIS_CODE_KEY = "IMAGE_VALIDATE_CODE";
 
     @Autowired
-    IUsersService iUsersService;
+    UserService userService;
     @Autowired
     RedisTemplate<Object, Object> redisTemplate;
 
@@ -51,7 +52,7 @@ public class LoginController {
         }
         ValueOperations<Object, Object> ops = redisTemplate.opsForValue();
         try {
-            Users user = iUsersService.findUserByUserName(userName);
+            User user = userService.selectUserByName(userName);
             if (null == user) {
                 return ResultBean.fail("用户不存在!");
             }
