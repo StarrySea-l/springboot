@@ -1,8 +1,8 @@
 package com.springboot.dome.shiro;
 
-import com.springboot.dome.base.ResultBean;
-import com.springboot.dome.entity.Users;
-import com.springboot.dome.service.IUsersService;
+import com.springboot.dome.entity.User;
+import com.springboot.dome.entity.bean.UserBean;
+import com.springboot.dome.service.UserService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -17,7 +17,8 @@ import org.springframework.util.StringUtils;
 public class CustomRealm extends AuthorizingRealm {
 
     @Autowired
-    private IUsersService iUsersService;
+    private UserService userService;
+
 
     /**
      * @MethodName doGetAuthorizationInfo
@@ -31,9 +32,9 @@ public class CustomRealm extends AuthorizingRealm {
         //获取登录用户名
         String name = (String) principalCollection.getPrimaryPrincipal();
         //查询用户名称
-        Users user = null;
+        User user = null;
         try {
-            user = iUsersService.findUserByUserName(name);
+            user = userService.selectUserByName(name);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -64,9 +65,11 @@ public class CustomRealm extends AuthorizingRealm {
         }
         //获取用户信息
         String name = authenticationToken.getPrincipal().toString();
-        Users user = null;
+        User user = null;
+        UserBean userBean = null;
         try {
-            user = iUsersService.findUserByUserName(name);
+            user = userService.selectUserByName(name);
+            userBean = userService.getUserById(user.getId());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,7 +78,7 @@ public class CustomRealm extends AuthorizingRealm {
             return null;
         } else {
             //这里验证authenticationToken和simpleAuthenticationInfo的信息
-            SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(name, user.getPassword().toString(), getName());
+            SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(name, userBean.getEncrptPassword().toString(), getName());
             return simpleAuthenticationInfo;
         }
     }

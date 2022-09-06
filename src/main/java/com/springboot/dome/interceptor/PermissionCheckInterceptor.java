@@ -1,17 +1,12 @@
 package com.springboot.dome.interceptor;
 
-import com.alibaba.fastjson.JSON;
-import com.springboot.dome.base.ResultBean;
-import com.springboot.dome.entity.Users;
+import com.springboot.dome.entity.User;
 import com.springboot.dome.imagecode.ImageCodeValidator;
-import com.springboot.dome.service.IUsersService;
 import com.springboot.dome.util.ContextHelper;
-import com.springboot.dome.util.JwtKit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -47,7 +42,7 @@ public class PermissionCheckInterceptor extends HandlerInterceptorAdapter {
      *
      * @param user
      */
-    public static void setLoginUser(Users user) {
+    public static void setLoginUser(User user) {
         ContextHelper.setSessionAttr(LOGIN_USER_KEY, user);
     }
 
@@ -56,10 +51,10 @@ public class PermissionCheckInterceptor extends HandlerInterceptorAdapter {
      *
      * @return
      */
-    public static Users getLoginUser() {
+    public static User getLoginUser() {
         Object obj = ContextHelper.getSessionAttr(LOGIN_USER_KEY);
-        if (obj instanceof Users) {
-            return (Users) obj;
+        if (obj instanceof User) {
+            return (User) obj;
         }
         return null;
     }
